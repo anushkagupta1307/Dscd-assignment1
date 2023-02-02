@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option java_multiple_files= true ;
+option java_package = "org.example";
+
+
+service ServerRegistrationService {
+  rpc registerServer (ServerRegistrationRequest) returns (ServerRegistrationResponse) {};
+}
+
+message ServerRegistrationRequest{
+  int32 server_id=1;
+}
+message ServerRegistrationResponse{
+  int32 server_id=1;
+  string registration_response=2;
+}
+

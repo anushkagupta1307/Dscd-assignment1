@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option java_multiple_files= true ;
+option java_package = "org.example";
+
+service SportsArticleService {
+  rpc getSportsArticle (SportsArticleRequest) returns (SportsArticleResponse) {};
+}
+
+message SportsArticleRequest{
+  int32 id=1;
+}
+message SportsArticleResponse{
+  string type =1 ;
+  string author =2;
+  string time =3;
+  string article=4;
+}
+

@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_multiple_files= true ;
+option java_package = "org.example";
+
+
+service FashionArticleService {
+  rpc getFashionArticle (FashionArticleRequest) returns (FashionArticleResponse) {};
+}
+
+message FashionArticleRequest{
+  int32 id=1;
+}
+message FashionArticleResponse{
+  string type =1 ;
+  string author =2;
+  string time =3;
+  string article=4;
+}
+
