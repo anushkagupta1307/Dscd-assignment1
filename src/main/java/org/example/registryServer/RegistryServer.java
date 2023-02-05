@@ -4,30 +4,42 @@ import org.lognet.springboot.grpc.GRpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 @GRpcService
 public class RegistryServer extends ServerRegistrationServiceGrpc.ServerRegistrationServiceImplBase {
-    Logger logger= LoggerFactory.getLogger(RegistryServer.class);
     static int MAX_SERVERS = 5;
 
-    public int registered_servers;
+    public static List<ServerRegistrationRequest> serversList=new ArrayList<>();
+
 @Override
-public void registerServer(org.example.ServerRegistrationRequest request,
+public void registerServer(ServerRegistrationRequest request,
                            io.grpc.stub.StreamObserver<org.example.ServerRegistrationResponse> responseObserver) {
 
-    logger.info("Got Registration Request For Server ID : "+request.getServerId());
 
     ServerRegistrationResponse response;
-    if(registered_servers<=MAX_SERVERS) {
-        registered_servers++;
-         response = ServerRegistrationResponse.newBuilder().setServerId(request.getServerId()).setRegistrationResponse("SUCCESS").build();
+    if(serversList.size()<=MAX_SERVERS) {
+        serversList.add(request);
+         response = ServerRegistrationResponse.newBuilder().setHost(request.getHost()).setPort(request.getPort()).setRegistrationResponse("SUCCESS").build();
     }
     else{
-         response = ServerRegistrationResponse.newBuilder().setServerId(request.getServerId()).setRegistrationResponse("FAILED").build();
+         response = ServerRegistrationResponse.newBuilder().setHost(request.getHost()).setPort(request.getPort()).setRegistrationResponse("FAILED").build();
     }
     responseObserver.onNext(response);
     responseObserver.onCompleted();
 
 }
+
+@Override
+public void getServerList(com.google.protobuf.Empty request,
+                          io.grpc.stub.StreamObserver<org.example.ListOfServersResponse> responseObserver) {
+
+    ListOfServersResponse servers= ListOfServersResponse.newBuilder().addAllServersList(serversList).build();
+    responseObserver.onNext(servers);
+    responseObserver.onCompleted();
+}
+
+
 }

@@ -2,17 +2,24 @@ syntax = "proto3";
 
 option java_multiple_files= true ;
 option java_package = "org.example";
-
-
-service ServerRegistrationService {
-  rpc registerServer (ServerRegistrationRequest) returns (ServerRegistrationResponse) {};
-}
+import "google/protobuf/empty.proto";
 
 message ServerRegistrationRequest{
-  int32 server_id=1;
-}
-message ServerRegistrationResponse{
-  int32 server_id=1;
-  string registration_response=2;
+  string host=1;
+  int32 port=2;
 }
 
+service ServerRegistrationService {
+  rpc registerServer (ServerRegistrationRequest) returns (ServerRegistrationResponse) ;
+  rpc getServerList(google.protobuf.Empty) returns (ListOfServersResponse);
+}
+
+message ServerRegistrationResponse{
+  string host=1;
+  int32 port=2;
+  string registration_response=3;
+}
+
+message ListOfServersResponse{
+repeated ServerRegistrationRequest serversList=1;
+}

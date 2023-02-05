@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+option java_multiple_files= true ;
+option java_package = "org.example";
+import "google/protobuf/empty.proto";
+
+message Article{
+  string type =1 ;
+  string author =2;
+  string date =3;
+  string article=4;
+}
+message ArticleRequest{
+  int32 client_id=1;
+  string type=2;
+  string author=3;
+  string date=4;
+}
+message ArticleResponse{
+  repeated Article Articles=1;
+}
+
+message ClientRegistrationRequest{
+  int32 client_id=1;
+}
+message ClientRegistrationResponse{
+  int32 client_id=1;
+  string registration_response=2;
+}
+
+message PublishArticleRequest{
+  int32 client_id=1;
+  Article article=2;
+}
+message PublishArticleResponse{
+  string publishArticleResponse=1;
+}
+
+service ArticleService {
+  rpc getArticles (ArticleRequest) returns (ArticleResponse) ;
+  rpc joinServer (ClientRegistrationRequest) returns (ClientRegistrationResponse) ;
+  rpc leaveServer (ClientRegistrationRequest) returns (ClientRegistrationResponse);
+  rpc publishArticle (PublishArticleRequest) returns (PublishArticleResponse);
+  rpc serverBecomesClient(google.protobuf.Empty) returns (ArticleResponse);
+}
+
