@@ -6,7 +6,6 @@ import org.lognet.springboot.grpc.GRpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +30,7 @@ public class Server extends ArticleServiceGrpc.ArticleServiceImplBase {
         allArticles.add(article5);
         allArticles.add(article6);
     }
-    public static List<Integer> clients=new ArrayList<>();
+    public List<Integer> clients=new ArrayList<>();
 
     @Override
     public void joinServer(ClientRegistrationRequest request, StreamObserver<ClientRegistrationResponse> responseObserver){
@@ -52,7 +51,6 @@ public class Server extends ArticleServiceGrpc.ArticleServiceImplBase {
     @Override
     public void leaveServer(ClientRegistrationRequest request, StreamObserver<ClientRegistrationResponse> responseObserver){
 
-        logger.info("Got Leave Request For Client ID : "+request.getClientId());
         ClientRegistrationResponse response;
         if(clients.contains(request.getClientId()))
         {
@@ -73,10 +71,10 @@ public class Server extends ArticleServiceGrpc.ArticleServiceImplBase {
         PublishArticleResponse response;
         if(clients.contains(request.getClientId())) {
             allArticles.add(request.getArticle());
-            response = PublishArticleResponse.newBuilder().setPublishArticleResponse("SUCCESS").build();
+            response = PublishArticleResponse.newBuilder().setSuccessResponse("SUCCESS").build();
         }
         else{
-            response = PublishArticleResponse.newBuilder().setPublishArticleResponse("FAILED").build();
+            response = PublishArticleResponse.newBuilder().setErrorResponse("FAILED").build();
         }
         responseObserver.onNext(response);
         responseObserver.onCompleted();

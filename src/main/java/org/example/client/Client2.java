@@ -27,7 +27,7 @@ public class Client2 {
             switch (n) {
                 case 1:
                     System.out.println("Servers List Registered with Registry Server : ");
-                    ManagedChannel managedChannel4=ManagedChannelBuilder.forAddress("localhost",6565).usePlaintext().build();
+                    ManagedChannel managedChannel4= ManagedChannelBuilder.forAddress("localhost",6565).usePlaintext().build();
                     ServerRegistrationServiceGrpc.ServerRegistrationServiceBlockingStub serverRegistrationServiceBlockingStub=ServerRegistrationServiceGrpc.newBlockingStub(managedChannel4);
                     ListOfServersResponse response=serverRegistrationServiceBlockingStub.getServerList(Empty.newBuilder().build());
                     List<ServerRegistrationRequest> registeredServers=response.getServersListList();
@@ -98,12 +98,15 @@ public class Client2 {
                     sc.nextLine();
                     System.out.println("Enter Article : ");
                     String article=sc.nextLine();
-                    String date_article=LocalDate.now().toString();
+                    String date_article= LocalDate.now().toString();
                     Article article1=Article.newBuilder().setType(type_article).setDate(date_article).setAuthor(author_article).setArticle(article).build();
                     ManagedChannel managedChannel3= ManagedChannelBuilder.forAddress(host_publish,port_publish).usePlaintext().build();
                     ArticleServiceGrpc.ArticleServiceBlockingStub blockingStub3= ArticleServiceGrpc.newBlockingStub(managedChannel3);
                     PublishArticleResponse publishArticleResponse=  blockingStub3.publishArticle(PublishArticleRequest.newBuilder().setClientId(2).setArticle(article1).build());
-                    System.out.println(publishArticleResponse.getPublishArticleResponse());
+                    System.out.println(publishArticleResponse.getPublishArticleResponseCase());
+                    break;
+                case 6 :
+                    System.exit(0);
                     break;
             }
         }

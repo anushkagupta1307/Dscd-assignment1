@@ -33,7 +33,11 @@ message PublishArticleRequest{
   Article article=2;
 }
 message PublishArticleResponse{
-  string publishArticleResponse=1;
+
+  oneof publishArticleResponse {
+   string successResponse = 1;
+    string errorResponse = 2;
+  }
 }
 
 service ArticleService {

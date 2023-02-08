@@ -26,10 +26,8 @@ public class StartServer3 {
             switch (n) {
                 case 1:
                     System.out.println("Register With The Registry Server : ");
-                    System.out.println("Enter Host : ");
-                    String host = sc.next();
-                    System.out.println("Enter port : ");
-                    int port = sc.nextInt();
+                    String host = "localhost";
+                    int port = 9090;
                     io.grpc.Server server = ServerBuilder
                             .forPort(port)
                             .addService(new Server()).build();
@@ -52,6 +50,9 @@ public class StartServer3 {
                     System.out.println("All Articles on Server 3 before adding " + Server.allArticles.size());
                     Server.allArticles.addAll(articlesRetrieved);
                     System.out.println("All Articles on Server 3 after adding " + Server.allArticles.size());
+                    break;
+                case 3 :
+                    System.exit(0);
                     break;
             }
         }
