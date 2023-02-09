@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 public class Server extends ArticleServiceGrpc.ArticleServiceImplBase {
     static Logger logger= LoggerFactory.getLogger(Server.class);
-    int MAX_CLIENTS=5;
+    int MAX_CLIENTS=2;
     public static List<Article> allArticles= new ArrayList<>();
     {
         Article article1 = Article.newBuilder().setType("SPORTS").setAuthor("Anushka").setDate(LocalDate.now().toString()).setArticle("Watch India vs NZ Cricket Score!").build();
@@ -35,9 +35,9 @@ public class Server extends ArticleServiceGrpc.ArticleServiceImplBase {
     @Override
     public void joinServer(ClientRegistrationRequest request, StreamObserver<ClientRegistrationResponse> responseObserver){
         logger.info("Got Registration Request For Client ID : "+request.getClientId());
-
+        System.out.println("Join Server Request from client : "+request.getClientId());
         ClientRegistrationResponse response;
-        if(clients.size()<=MAX_CLIENTS) {
+        if(clients.size()<MAX_CLIENTS) {
             clients.add(request.getClientId());
             response = ClientRegistrationResponse.newBuilder().setClientId(request.getClientId()).setRegistrationResponse("SUCCESS").build();
         }
@@ -50,7 +50,7 @@ public class Server extends ArticleServiceGrpc.ArticleServiceImplBase {
 
     @Override
     public void leaveServer(ClientRegistrationRequest request, StreamObserver<ClientRegistrationResponse> responseObserver){
-
+        System.out.println("Leave Server Request from client : "+request.getClientId());
         ClientRegistrationResponse response;
         if(clients.contains(request.getClientId()))
         {
@@ -67,7 +67,7 @@ public class Server extends ArticleServiceGrpc.ArticleServiceImplBase {
 
     @Override
     public void publishArticle(PublishArticleRequest request, StreamObserver<PublishArticleResponse> responseObserver){
-
+        System.out.println("Publish Article Request from client : "+request.getClientId());
         PublishArticleResponse response;
         if(clients.contains(request.getClientId())) {
             allArticles.add(request.getArticle());
@@ -83,7 +83,7 @@ public class Server extends ArticleServiceGrpc.ArticleServiceImplBase {
 
     @Override
     public void getArticles(ArticleRequest request, StreamObserver<ArticleResponse> responseObserver) {
-
+        System.out.println("Get Article Request from client : "+request.getClientId());
         List<Article> articleList = new ArrayList<>();
         if(clients.contains(request.getClientId())) {
 

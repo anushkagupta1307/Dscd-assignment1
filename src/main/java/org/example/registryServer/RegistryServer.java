@@ -10,7 +10,7 @@ import java.util.List;
 
 @GRpcService
 public class RegistryServer extends ServerRegistrationServiceGrpc.ServerRegistrationServiceImplBase {
-    static int MAX_SERVERS = 5;
+    static int MAX_SERVERS = 2;
 
     public static List<ServerRegistrationRequest> serversList=new ArrayList<>();
 
@@ -20,7 +20,7 @@ public void registerServer(ServerRegistrationRequest request,
 
 
     ServerRegistrationResponse response;
-    if(serversList.size()<=MAX_SERVERS) {
+    if(serversList.size()<MAX_SERVERS) {
         serversList.add(request);
          response = ServerRegistrationResponse.newBuilder().setHost(request.getHost()).setPort(request.getPort()).setRegistrationResponse("SUCCESS").build();
     }
