@@ -20,8 +20,8 @@ public class Server extends ArticleServiceGrpc.ArticleServiceImplBase {
         Article article1 = Article.newBuilder().setType("SPORTS").setAuthor("Anushka").setDate(LocalDate.now().toString()).setArticle("Watch India vs NZ Cricket Score!").build();
         Article article2 = Article.newBuilder().setType("FASHION").setAuthor("Shaguftha").setDate(LocalDate.now().toString()).setArticle("Vogue Fashion week is live!").build();
         Article article3 = Article.newBuilder().setType("POLITICS").setAuthor("Anushka").setDate(LocalDate.now().toString()).setArticle("BJP rally in Delhi!").build();
-        Article article4 = Article.newBuilder().setType("SPORTS").setAuthor("Harsh").setDate(LocalDate.now().toString()).setArticle("Badminton Tournament from tomorrow!").build();
-        Article article5 = Article.newBuilder().setType("FASHION").setAuthor("Shaguftha").setDate(LocalDate.now().toString()).setArticle("London Fashion Week begins!").build();
+        Article article4 = Article.newBuilder().setType("SPORTS").setAuthor("Harsh").setDate(LocalDate.now().minusDays(3).toString()).setArticle("Badminton Tournament from tomorrow!").build();
+        Article article5 = Article.newBuilder().setType("FASHION").setAuthor("Shaguftha").setDate(LocalDate.now().minusDays(1).toString()).setArticle("London Fashion Week begins!").build();
         Article article6 = Article.newBuilder().setType("SPORTS").setAuthor("Anushka").setDate(LocalDate.now().minusDays(2).toString()).setArticle("India vs Australia Cricket Match Cancelled!").build();
         allArticles.add(article1);
         allArticles.add(article2);
