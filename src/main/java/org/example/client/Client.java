@@ -93,11 +93,16 @@ public class Client {
         System.out.println("Enter Article : ");
         String article=sc.nextLine();
         String date_article= LocalDate.now().toString();
-        Article article1=Article.newBuilder().setType(type_article).setDate(date_article).setAuthor(author_article).setArticle(article).build();
-        ManagedChannel managedChannel3= ManagedChannelBuilder.forAddress(host_publish,port_publish).usePlaintext().build();
-        ArticleServiceGrpc.ArticleServiceBlockingStub blockingStub3= ArticleServiceGrpc.newBlockingStub(managedChannel3);
-        PublishArticleResponse publishArticleResponse=  blockingStub3.publishArticle(PublishArticleRequest.newBuilder().setClientId(client_id).setArticle(article1).build());
-        System.out.println(publishArticleResponse.getPublishArticleResponseCase());
+        if(!type_article.equals("NA") && !type_article.equals("") && !type_article.equals(null)) {
+            Article article1 = Article.newBuilder().setType(type_article).setDate(date_article).setAuthor(author_article).setArticle(article).build();
+            ManagedChannel managedChannel3 = ManagedChannelBuilder.forAddress(host_publish, port_publish).usePlaintext().build();
+            ArticleServiceGrpc.ArticleServiceBlockingStub blockingStub3 = ArticleServiceGrpc.newBlockingStub(managedChannel3);
+            PublishArticleResponse publishArticleResponse = blockingStub3.publishArticle(PublishArticleRequest.newBuilder().setClientId(client_id).setArticle(article1).build());
+            System.out.println(publishArticleResponse.getPublishArticleResponseCase());
+        }
+        else{
+            System.out.println("Illegal Request format. Please specify Article type");
+        }
     }
 
 }
