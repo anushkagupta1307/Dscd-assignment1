@@ -1,14 +1,20 @@
 package org.example.server;
 import com.google.protobuf.Empty;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
+import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 import org.example.*;
 import org.lognet.springboot.grpc.GRpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 @GRpcService
 @Component
@@ -150,5 +156,30 @@ public class Server extends ArticleServiceGrpc.ArticleServiceImplBase {
         ArticleResponse articleResponse=ArticleResponse.newBuilder().addAllArticles(allArticles).build();
         responseObserver.onNext(articleResponse);
         responseObserver.onCompleted();
+    }
+
+    public static void registerServerWithRegistryServer(String host, int port) throws IOException {
+        System.out.println("Register With The Registry Server : ");
+        io.grpc.Server server = ServerBuilder
+                .forPort(port)
+                .addService(new Server()).build();
+        ManagedChannel managedChannel = ManagedChannelBuilder.forAddress("localhost", 6565).usePlaintext().build();
+        ServerRegistrationServiceGrpc.ServerRegistrationServiceBlockingStub blockingStub = ServerRegistrationServiceGrpc.newBlockingStub(managedChannel);
+        ServerRegistrationResponse response = blockingStub.registerServer(ServerRegistrationRequest.newBuilder().setHost(host).setPort(port).build());
+        System.out.println("Server Registered :  = " + response.getHost() + " " + response.getPort() + " " + response.getRegistrationResponse());
+        server.start();
+    }
+
+    public static void becomeClient(){
+        Scanner sc=new Scanner(System.in);
+        System.out.println("Enter host of server which you want to connect to : ");
+        String host2 = sc.next();
+        System.out.println("Enter Port of Server which you want to connect : ");
+        int port2 = sc.nextInt();
+        ManagedChannel managedChannel1 = ManagedChannelBuilder.forAddress(host2, port2).usePlaintext().build();
+        ArticleServiceGrpc.ArticleServiceBlockingStub articleServiceBlockingStub = ArticleServiceGrpc.newBlockingStub(managedChannel1);
+        ArticleResponse articleResponse = articleServiceBlockingStub.serverBecomesClient(Empty.newBuilder().build());
+        List<Article> articlesRetrieved = articleResponse.getArticlesList();
+        Server.allArticles.addAll(articlesRetrieved);
     }
 }

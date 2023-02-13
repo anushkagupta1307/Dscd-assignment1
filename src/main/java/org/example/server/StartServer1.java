@@ -1,14 +1,6 @@
 package org.example.server;
-
-import com.google.protobuf.Empty;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import io.grpc.ServerBuilder;
-import org.example.*;
 import org.springframework.context.annotation.ComponentScan;
-
 import java.io.IOException;
-import java.util.List;
 import java.util.Scanner;
 
 @ComponentScan
@@ -27,31 +19,10 @@ public class StartServer1 {
 
             switch (n) {
                 case 1:
-                    System.out.println("Register With The Registry Server : ");
-                    String host = "localhost";
-                    int port = 8080;
-                    io.grpc.Server server = ServerBuilder
-                            .forPort(port)
-                            .addService(new Server()).build();
-                    ManagedChannel managedChannel = ManagedChannelBuilder.forAddress("localhost", 6565).usePlaintext().build();
-                    ServerRegistrationServiceGrpc.ServerRegistrationServiceBlockingStub blockingStub = ServerRegistrationServiceGrpc.newBlockingStub(managedChannel);
-                    ServerRegistrationResponse response = blockingStub.registerServer(ServerRegistrationRequest.newBuilder().setHost(host).setPort(port).build());
-                    System.out.println("Server Registered :  = " + response.getHost() + " " + response.getPort() + " " + response.getRegistrationResponse());
-                    server.start();
+                   Server.registerServerWithRegistryServer("localhost",8080);
                     break;
                 case 2:
-                    System.out.println("Enter host of server which you want to connect to : ");
-                    String host2 = sc.next();
-                    System.out.println("Enter Port of Server which you want to connect : ");
-                    int port2 = sc.nextInt();
-                    ManagedChannel managedChannel1 = ManagedChannelBuilder.forAddress(host2, port2).usePlaintext().build();
-                    ArticleServiceGrpc.ArticleServiceBlockingStub articleServiceBlockingStub = ArticleServiceGrpc.newBlockingStub(managedChannel1);
-                    ArticleResponse articleResponse = articleServiceBlockingStub.serverBecomesClient(Empty.newBuilder().build());
-                    List<Article> articlesRetrieved = articleResponse.getArticlesList();
-                    System.out.println("Articles Retrieved : "+articlesRetrieved.size());
-                    System.out.println("All Articles on Server 1 before adding " + Server.allArticles.size());
-                    Server.allArticles.addAll(articlesRetrieved);
-                    System.out.println("All Articles on Server 1 after adding " + Server.allArticles.size());
+                    Server.becomeClient();
                     break;
                 case 3 :
                     System.exit(0);
