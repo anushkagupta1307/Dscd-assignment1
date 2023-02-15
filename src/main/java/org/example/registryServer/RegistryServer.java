@@ -1,9 +1,6 @@
 package org.example.registryServer;
 import org.example.*;
 import org.lognet.springboot.grpc.GRpcService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +8,6 @@ import java.util.List;
 @GRpcService
 public class RegistryServer extends ServerRegistrationServiceGrpc.ServerRegistrationServiceImplBase {
     static int MAX_SERVERS = 2;
-
     public static List<ServerRegistrationRequest> serversList=new ArrayList<>();
 
 @Override
@@ -29,9 +25,7 @@ public void registerServer(ServerRegistrationRequest request,
     }
     responseObserver.onNext(response);
     responseObserver.onCompleted();
-
 }
-
 @Override
 public void getServerList(com.google.protobuf.Empty request,
                           io.grpc.stub.StreamObserver<org.example.ListOfServersResponse> responseObserver) {
@@ -39,7 +33,5 @@ public void getServerList(com.google.protobuf.Empty request,
     ListOfServersResponse servers= ListOfServersResponse.newBuilder().addAllServersList(serversList).build();
     responseObserver.onNext(servers);
     responseObserver.onCompleted();
-}
-
-
+    }
 }
